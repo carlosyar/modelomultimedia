@@ -1,0 +1,83 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Oct 28 19:40:00 2024
+
+@author: CARLOS MARTINEZ
+"""
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado de la Predicción</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .result-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .prediction-text {
+            font-size: 24px;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .prediction-image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        a {
+            font-size: 18px;
+            color: #4CAF50;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Resultado de la Predicción</h1>
+
+    <div class="result-container">
+        <p class="prediction-text">Clase predicha: {{ predicted_class }}</p>
+        <img src="{{ predicted_image }}" alt="{{ predicted_class }}" class="prediction-image">
+        <br>
+        <a href="/">Probar otra imagen</a>
+    </div>
+
+</body>
+</html>
+
