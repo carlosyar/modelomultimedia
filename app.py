@@ -11,10 +11,14 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from PIL import Image
 
-# Global variable to store the model and prevent reloading
+# Desactivar el uso de la GPU si no está disponible
+tf.config.set_visible_devices([], 'GPU')
+print("GPU desactivada para uso en la aplicación.")
+
+# Variable global para almacenar el modelo
 model = None
 
-# Function to load the model only when needed
+# Función para cargar el modelo solo cuando sea necesario
 def load_trained_model():
     global model
     if model is None:
@@ -25,7 +29,7 @@ def load_trained_model():
 def crear_app():
     app = Flask(__name__)
 
-    # Class names (you can keep this global or move it to the function)
+    # Nombres de las clases
     class_names = [
         'Bean', 'Bitter_Gourd', 'Bottle_Gourd', 'Brinjal', 
         'Broccoli', 'Cabagge', 'Capsicum', 'Carrot', 
@@ -33,12 +37,12 @@ def crear_app():
         'Pumpkin', 'Radish', 'Tomato'
     ]
     
-    # Define the main route
+    # Ruta principal
     @app.route('/')
     def home():
         return render_template('index.html')
     
-    # Route to classify the image
+    # Ruta para predecir la imagen
     @app.route('/predict', methods=['POST'])
     def predict():
         if 'file' not in request.files:
@@ -48,21 +52,21 @@ def crear_app():
         if file.filename == '':
             return "No selected file"
         
-        # Read the image file and convert it
+        # Leer y procesar la imagen
         img = Image.open(file.stream)
-        img = img.resize((150, 150))  # Resize to 150x150
+        img = img.resize((150, 150))  # Redimensionar a 150x150
         img_array = image.img_to_array(img)
-        img_array = np.expand_dims(img_array, axis=0) / 255.0  # Normalize
+        img_array = np.expand_dims(img_array, axis=0) / 255.0  # Normalizar
 
-        # Load the model only when making the prediction (Lazy Loading)
+        # Cargar el modelo solo cuando se haga la predicción (Lazy Loading)
         model = load_trained_model()
 
-        # Perform the prediction
+        # Realizar la predicción
         preds = model.predict(img_array)
-        predicted_class_index = np.argmax(preds[0])  # Get the index of the class with the highest probability
-        predicted_class = class_names[predicted_class_index]  # Get the class name
+        predicted_class_index = np.argmax(preds[0])  # Obtener el índice de la clase con mayor probabilidad
+        predicted_class = class_names[predicted_class_index]  # Obtener el nombre de la clase
     
-        # Construct the path to the predicted class image
+        # Construir la ruta para la imagen de la clase predicha
         predicted_image_path = f'static/images/{predicted_class}.jpg'
     
         return render_template('result.html', predicted_class=predicted_class, predicted_image=predicted_image_path)
